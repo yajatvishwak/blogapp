@@ -1,0 +1,226 @@
+# Simple Linear Regression - Basic Guide with example (Python)
+**Linear regression** is one of the most well known and easy algorithm/model in statistics and machine learning.
+
+Unknowingly, we do use this model a lot in our daily lives. Consider predicting the value of a plot of land, based on the surrounding plots or predicting the grade of a student based on the number of hours he/she puts into studying. Another example of the same could be predicting the value of the phone based on the RAM it holds. This prediction is basically what linear regression is all about.
+
+To put it forward in layman's terms, **Linear Regression is the correlation between a dependent variable (say Y) and an independent variable (say X).**
+
+  
+
+# Concept and Theory
+
+  
+
+> y = b0 + (b1.x1)
+
+
+This equation is the basis of Linear Regression. Notice, that this equation is similar to the equation of a straight line.
+
+  
+
+Let's take an example to understand this better.
+
+  | Years of Experience | Salary |
+|---------------------|--------|
+| 1.1                 | 39343  |
+| 1.3                 | 46205  |
+| 1.5                 | 37731  |
+| 2                   | 43525  |
+| 2.2                 | 39891  |
+| 2.9                 | 56642  |
+| 3                   | 60150  |
+| 3.2                 | 54445  |
+| 3.2                 | 64445  |
+| 3.7                 | 57189  |
+| 3.9                 | 63218  |
+| 4                   | 55794  |
+| 4                   | 56957  |
+| 4.1                 | 57081  |
+| 4.5                 | 61111  |
+| 4.9                 | 67938  |
+| 5.1                 | 66029  |
+| 5.3                 | 83088  |
+| 5.9                 | 81363  |
+| 6                   | 93940  |
+| 6.8                 | 91738  |
+| 7.1                 | 98273  |
+| 7.9                 | 101302 |
+| 8.2                 | 113812 |
+| 8.7                 | 109431 |
+| 9                   | 105582 |
+| 9.5                 | 116969 |
+| 9.6                 | 112635 |
+| 10.3                | 122391 |
+| 10.5                | 121872 |
+--------------------------------
+
+
+
+Say we are finding out the correlation of salary and experience (how much salary should an employee get for his/her experience). Plotting the above table,
+![Salary vs Exp](https://i.imgur.com/sWgQ5V3.png)
+Now, one way we can use this graph to make a relation between the two variables is to draw a line that best fits all the point. This line will have its own intercept value ( b0 ) and slope ( b1 ).
+  
+![enter image description here](https://i.imgur.com/gdaXuvB.png)
+  
+
+> Where the coefficient value or b1 or slope is **9312.57512673**
+> and the intercept or b0 is **26780.09915062818**
+> Thus the equation of the line is,
+> y = 26780.09915062818 + (9312.57512673).x1 
+
+The coefficient value ( b1 ) represents by how much the independent variable(X or **Experience**) affect the dependent variable(Y or **Salary**).
+The intercept value ( b0 ) represents the **minimum value** of Y (**Salary**) that the relationship hold for the least value of X (independent variable or **Experience**). i.e How much should a person with no experience get?
+
+In this example, according the regression line, the minimum salary that a person gets without any experience is **26780.09915062818** (b0 value or intercept value)
+and the factor by which the Y depends on X is **9312.57512673** ( b1 value or slope/coefficient value).
+  
+
+The "line of the best fit" ( Red line ) is the prediction that the model returns after applying the Linear Regression on the given data set. This line can be used to predict new values of the dependent variable ( Y or **Salary** ) based on the correlation of the other plotted values that were given to the model beforehand.
+
+> For instance, using the equation of the line,
+>  y = 26780.09915062818 + (9312.57512673).x1 
+>  or 
+>  salary = 26780.09 + (9312.57).experience
+>  
+>  We can substitute the value of x1(experience) to a new value that is not present the mentioned data set and find out the salary of the new value of x1(experience).
+>  
+>  Please note the values, will not be precise, but close, since the model is trained on various other points and those point affects the overall relation.
+ 
+
+
+### Finding the "Line of best fit"
+To find the "line of the best fit" we use another method called "least sum of squares".
+
+In this method, we find out the distance of each point from the model line, square this distance and add them. This yields in a number that shows how well the line fits the plotted values. ( say FITNESS)
+
+Doing this experiment repeatedly, we find out the least value of the FITNESS variable. The corresponding equation to the least FITNESS value is the "line of the best fit".
+Since this is handled by the pre-written functions in many programming languages , just having a brief knowledge of this method is sufficient.
+
+
+# Python Implementation 
+This model can be coded from scratch easily. But to save time and not to reinvent the wheel, We will take help of the pre-written code library called SKlearn. This library holds various statistical models  like Regression, Classification, Clustering etc.(To install sk learn, [click here](https://pypi.org/project/scikit-learn/)).
+
+### 1. Import the libraries
+
+    import numpy as np #Matrix calculation library
+    import matplotlib.pyplot as plt 
+    # used for plotting graphs and visualisation of data
+
+### 2.  Importing the data set
+
+    
+    x = np.array([[ 1.1],
+       [ 1.3],
+       [ 1.5],
+       [ 2. ],
+       [ 2.2],
+       [ 2.9],
+       [ 3. ],
+       [ 3.2],
+       [ 3.2],
+       [ 3.7],
+       [ 3.9],
+       [ 4. ],
+       [ 4. ],
+       [ 4.1],
+       [ 4.5],
+       [ 4.9],
+       [ 5.1],
+       [ 5.3],
+       [ 5.9],
+       [ 6. ],
+       [ 6.8],
+       [ 7.1],
+       [ 7.9],
+       [ 8.2],
+       [ 8.7],
+       [ 9. ],
+       [ 9.5],
+       [ 9.6],
+       [10.3],
+       [10.5]])
+ 
+    y = np.array([ 39343.,  46205.,  37731.,  43525.,  39891.,  56642.,  60150.,
+        54445.,  64445.,  57189.,  63218.,  55794.,  56957.,  57081.,
+        61111.,  67938.,  66029.,  83088.,  81363.,  93940.,  91738.,
+        98273., 101302., 113812., 109431., 105582., 116969., 112635.,
+       122391., 121872.])
+
+
+### 3. Splitting the x and y data into 2 data sets
+This step splits both x and y data set into 2 proportional parts - training part and testing part. The training part is used for the actual regression while the testing part is not exposed to the model. When the regression is complete, the testing set is used to test if the regression was successful since these values are new to the model but known to us. The output of the testing set can be compared with the actual values (found in the testing set) to find out how well the model has fit.
+
+    from sklearn.model_selection import train_test_split
+    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size  =  0.2, random_state  =  0)
+
+This function performs a **80/20 split**. i.e 80% data goes as training and the rest 20% goes as testing.
+
+### 4.  Importing the regression model 
+
+    from sklearn.linear_model import LinearRegression
+
+ ### 5. Performing regression on the data
+ 
+
+    regressor = LinearRegression() #calling the class from the sklearn library 
+    regressor.fit(x_train,y_train) # performing the regression 
+
+### 6. Printing the Coefficients ( b0 and b1 ) 
+This step prints the values of slope and intercept of the "line of best fit" after the regression is complete.
+
+    print(regressor.coef_)
+    print(regressor.intercept_)
+
+### 7. Plotting and Visualisation 
+
+    plt.scatter(x_train,y_train, color  =  'blue')
+    plt.plot(x_train,regressor.predict(x_train),color  =  'red') # plotting the line of best fit hich is stored in the "regressor"
+    plt.title("Salary")
+    plt.xlabel("Years of exp")
+    plt.ylabel("Salary vs Years of exp")
+    plt.show()
+   
+
+   Output:![enter image description here](https://i.imgur.com/gdaXuvB.png)
+   
+### 8. Checking how the model fits for values which aren't present in the data set
+
+    plt.scatter(x_test,y_test, color  =  'red')
+
+    plt.plot(x_test,regressor.predict(x_test),color  =  'blue')
+    # this data set is exposed to the trained model for the 
+    first time. 
+
+    plt.title("Salary")
+    
+    plt.xlabel("Years of exp")
+    
+    plt.ylabel("salary")
+    
+    plt.show()
+    
+    
+Output:
+![enter image description here](https://i.imgur.com/i5vnLSI.png)
+
+ As we can see the regressor tried to predict the values of new- seen data with the "training" it received on the "training data set". 
+ Comparing the actual Salaries and the predicted salaries,
+
+
+| Predicted Salaries(regressor.predict(x_test)) 	| Actual Salaries (y_test) 	|
+|-----------------------------------------------	|--------------------------	|
+| 40748.96184072                                	| 37731                    	|
+| 122699.62295594                               	| 122391                   	|
+| 64961.65717022                                	| 57081                    	|
+| 63099.14214487                                	| 63218                    	|
+| 115249.56285456                               	| 116969                   	|
+| 107799.50275317                               	| 109431                   	|
+
+We notice that the model has performed decently and returns values close enough to the actual values. The model is now ready to predict other values apart from the whole data set. 
+
+# Conclusion
+The Linear regression model is a vital part of Machine learning and is often referred as the "Hello World! " of this field for it's simplicity. This model plays a vital role in statistics and can be used in various other forms, for instance,  Polynomial Linear regression, Step wise regression, Lasso regression etc. 
+Having a basic understanding of this model, helps us understand many other complex models which are more suited for real world situations.
+
+The data in this post was extracted from Kaggle.com
+[Click here to go to kaggle](https://www.kaggle.com/rohankayan/years-of-experience-and-salary-dataset/version/1#)
