@@ -1,0 +1,39 @@
+---
+title: Genetic Algorithm - Theory and Intuition - Part 1 
+date: 2019-12-23
+---
+
+Genetic Algorithm is method of computation inspired by the **Theory of Evolution** as put forward by an English naturalist *Charles Darwin*.
+The theory was first formulated in Darwin's book "On the Species" in 1859. In layman's terms,
+
+> Evolution is described as the change physically and in behavior of  an
+> organism over a period of time to best adapt itself to it's
+> environment.
+
+
+To understand this better, let me put forward an example: 
+Let's say, there is an organism with one goal, that is to survive in a jungle for maximum time.
+Now a few characteristic features about this organism is that, it has it's own decision making ability and it's own views on how to achieve it's goal. *Let's refer this as the **DNA of the organism**.*
+Now imagine a **population** of these organisms, each abiding to their own DNA. 
+These organisms also have a special ability, that is to combine their DNAs and form a completely new organism fused with DNAs of both the parent DNA. *Let's refer this as **reproducing***.
+If this set of population is left in a jungle to perform their actions, there can be two outcomes, **the organism lives** because of all the decision it made *(i.e the DNA of the organism is best set to survive in an environment like presented to it)* or it **does not survive** because the organism made some wrong decisions *(i.e that it's DNA were not the best to survive in the environment presented to it)*.
+Also, during the life time of the organism, it under goes the **process of reproduction** and **generates offspring**. 
+The process of **Natural Selection** kicks in here. The organism with the right DNAs survive longer and reproduce having more offspring than the ones who have the wrong DNAs. **This means that the organisms with helpful traits or DNA will leave more offspring in the next generations than their peers, since their traits or DNAs are more effective at surviving in a jungle.**
+And the consequence of this is that as generations go by, organisms with helpful DNA will become more common. Over a couple of generations, the population will have adapted to it's environment. 
+
+
+This forms the basis of Genetic Algorithm in computers. The algorithm was developed to solve problems of sample space so vast that brute force method would fail or take an astronomically high amount of time to yield a result
+
+## Algorithm or Pseudo-code
+
+     1. Generate some initial population in a defined space with randomly
+        generated DNA and a rewarding or a fitness evaluation mechanism
+     2. Calculate fitness of each member in population
+     3. Choose 2 parent organism to form child. The choice of the 
+        parents can be done on the basis of fitness
+     4. Crossover - the reproduction process of the two parents
+     5. Mutate - additional changes to the DNA based on a set 
+        probability rate
+     6. Add this child to a new population
+     7. Replace the old population and loop from step 2 till 
+        population is completed adapted to the environment	
