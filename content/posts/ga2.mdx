@@ -1,0 +1,81 @@
+---
+title: Genetic Algorithm - Example and Problem Statement- Part 2 
+date: 2020-04-02
+---
+
+
+In my previous post, I explained about my understanding of genetic algorithm in brief [(here)](https://blog.yajatvishwakk.ml/ga1). In this post, we expand our understanding further by taking an example. 
+## Problem Statement and Math - Shakespearean Monkey (aka Infinite Monkey theorem)
+
+> The **infinite monkey theorem** says that a monkey randomly hitting
+> keys on a typewriter will eventually type out one of Willam
+> Shakespeare's works. When people talk about the infinite monkey
+> theorem, the "monkey" is not always a real monkey. Instead, it is an
+> example of a device that produces random letters. However, the chances of a monkey typing a text, like Shakespeare's  Hamlet
+~ Wikipedia
+
+To simply put, say I have a monkey typing randomly for eternity, there is a very very small possibility that it will be able to type out all of Shakespeare's(or any other author's) work at some point of time given that the monkey does not know what it is typing.
+Now to downsize this problem let's use a sentence instead of all of Shakespeare's works.
+Consider the same monkey is now replaced with your computer (because making a monkey type for eternity is animal abuse 😂) which can randomly guess 1 Million sentences a second. Given to the computer is to compute a sentence called **Target sentence**, (here, say, "All that glitters is not gold" ) by randomly guessing the characters of the sentence.
+Here is what the computer will do,
+
+The Target sentence is: ***all that glitters is not gold***  
+The length of the Target sentence is: **29 (including spaces)**
+
+    Guess #1: aaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+    Guess #2: aaaaaaaaaaaaaaaaaaaaaaaaaaaab
+    Guess #3: aaaaaaaaaaaaaaaaaaaaaaaaaaabb
+    .
+    .
+    .
+    Guess #N: allnjkdjfkskxiekfjskdkakdosk
+    .
+    .
+    .
+    Guess #M: all that glitters is not gold --> found!
+  
+    
+The computer will guess all sentences in the English language of the same length as the **Target** sentence till it perfectly guesses the correct sentence(**Target** sentence).
+This method is called **Bruteforcing** and can be used to calculate the word by guessing and combing random characters. 
+But there's a problem.
+
+*cue dark music*
+
+The possible combinations with 29 characters are so huge that it will take an astronomically long time for this program to guess the correct answer.
+#### The Math ❤️
+
+If you would have taken a probability class, this part will give you insights about the complexity of the problem we are dealing with. This part glorifies the size of the problem statement and can be skipped if you are not a fan of maths ( seriously though stick around )
+
+ 
+The total number of non-capital letters in English are: 26  
+Since the Target sentence can have spaces too, we treat it as a character from English.  
+Total number of characters: English characters + Space  
+ Total number of characters: **26 + 1 = 27**  
+Total sample space =  **27 <sup> N </sup>**  
+where N =  the length of the Target sentence  
+or here, **N = 29**  
+The probability of finding the sentence is (1/27)<sup>29</sup>!!!  
+which means **1** out of **323257909929174534292273980721360271853387**
+sentences.  
+Now given that your computer can guess **1 Million sentences every second**,
+It will take your computer, **102,504,410,809,606,368 years** to guess the sentence with brute force method.  
+  
+How can we solve this problem? 
+
+#### Genetic algorithm baby 🎉
+
+## The Solution
+Since our computer is smarter than the monkey, we are going to use the genetic algorithm for solving this problem.
+Firstly, let's model out an algorithm based on the original theory of evolution ( Part 1 explains about this briefly, check that out first) 
+
+   1. Generate an initial population of randomly guessed words to form the sentence
+    2. Perform Natural Selection - more on this later
+    3. Push the most "fit" or correct sentences to a mating pool where two sentences (parent sentences) "crossover" and form a new sentence (child sentence). (This child will have attributes of both the parent sentences)
+    4. Evaluate the current generation of sentences, If a perfect crossover happens i.e one sentence out of the population of sentences is correct, stop further processing.
+
+
+In a continued post, I will explain how to build the code. Thank you for reading and Stay tuned! 
+
+
+
+
