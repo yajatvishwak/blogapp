@@ -1,0 +1,201 @@
+---
+title: Genetic Algorithm - Example and Problem Statement- Part 2 
+date: 2020-04-04
+---
+
+
+
+# Genetic Algorithm - Code Implementation - Part 3
+
+The previous blog post explained the problem statement genetic algorithm solves. In this post, we shall look at the at how to make a python application to accomplish the equivalent.
+
+
+### Step 1: Generation of Population
+ We need to first generate a population of random strings of the same length as the target sentence which then evolve into the correct sentence (ie The target sentence). Each member (string) of the population will have 
+ 1.  a Phrase (genes)
+ 2. a "fitness" value i.e the correctness of the sentence when compared to the target sentence
+ 3.  ability to mutate
+ 4. ability to crossover with another member(string)  
+
+Let's make a DNA class with the above functionality. To add genes or phrase, we do, 
+
+    import random
+    import string
+    import math
+    class DNA:
+     
+     def  generateRandomPhrase(self, n):
+        letters = string.ascii_lowercase
+        letters = letters +  '  '
+        return  ''.join(random.choice(letters)  for i in range(n)) 
+       
+     def  generateRandomChar(self): # auxiliary function which we will use for mutation later
+        letters = string.ascii_lowercase
+        return random.choice(letters)
+       
+       
+     def  calFitness(self, target):
+        score =  0
+        for a, b in  zip(self.phrase, target):
+            if a == b:
+                score = score +  1
+        return  (score /  len(target)) # this is a vague way to check for fitness, other fitness functions could be used as well  eg monte carlo 
+        
+        
+     def __init__(self, n , target):
+        self.phrase = generateRandomPhrase()
+        self.fitness = self.calFitness(target)
+          
+The above code will make an object factory(class)  of DNA with its own random phrase and fitness value. So now we can make a population of DNAs  just by,  
+
+    population  =  [DNA(len(target), target)  for i in  range((num))]
+ **Note** - `population` is an array of DNA and each DNA represents a random string or a member. `target`  is the correct sentence we wish to evolve to.
+
+
+#### The crossing over of a DNA 👪
+This is the ability of the DNA to crossover or combine with another DNA  and form a child DNA. The child DNA will have characteristics of both the parent DNAs. 
+
+    def crossover(self, partner):
+        child =  DNA(len(partner.phrase) 
+        self.generateRandomPhrase(len(partner.phrase)))
+        midpoint = math.floor(randint(0, len(partner.phrase)-1))
+        child.phrase  = self.phrase[:midpoint]  + partner.phrase[midpoint:]
+        return child
+This function block returns a child DNA by randomly combing the two DNAs. 
+
+
+![enter image description here](https://i.imgur.com/d41r0Yf.png)
+
+#### The Mutation ability ☣️
+This ability of the DNA adds randomness to the DNA after crossing over, This step is not essential for problems like this one since it's on a very small scale, but as more and more complex problems surface, Mutation rate plays an important role in maintaining genetic diversity.
+A mutation will occur only if a value is greater than the specified mutation rate. That value used for comparison is calculated randomly
+After the mutation takes place, the previous phrase(or genes) is replaced with the new phrase( or genes) and the fitness is recalculated.
+ 
+
+       def  mutate(self, mr, target):
+            t =  '' # temp string
+            for i in self.phrase:
+                if random.random()  > mr: #random.random() returns a random value between 0 and 1
+                t = t + self.generateRandomChar()
+                else:
+                t = t + i
+            self.phrase  = t
+            self.fitness  = self.calFitness(target)
+
+Our DNA class looks like:
+
+ ![](https://i.imgur.com/ubGuzQA.png)
+
+ 
+[Code here - DNA.py](https://gist.github.com/yajatvishwak/59dc9540de519756a00b739a3c57245c)
+
+
+### Step 2. Defining Population 
+
+At this stage, we have our Members of the population ready. Let's go ahead and make the population and define all other functionality for achieving genetic algorithm.
+
+To make a population,
+
+    class Population:
+        def __init__(self, target, num, mr):
+            self.population = [ DNA(len(target), target) for i in range (num) ] # num is the number of members
+            self.target = target
+            #ignore these for now, they are explained below as and when required
+            self.matingPool  =  []
+        self.generations  =  0
+        self.mutationRate  = mr
+        self.finished  =  False
+        self.bphrase  =  ''
+
+### Natural Selection ✔️
+This is the process in which the model will choose the fittest i.e the most correct members of the population and add them to a pool (mating pool) where the crossover happens. The members with high correctness are more likely to enter the pool than ones with less fitness. This does not mean the ones with low fitness will not enter the mating pool, they do, but they are less likely. This is done to maintain genetic diversity and uniqueness.
+For instance, 
+DNA1 has a fitness of 34
+DNA2 has a fitness of 70 
+Then DNA1 has fewer chances to enter the mating pool, producing less wrong sentences in future generations.
+
+   
+
+     def  naturalSelection(self):
+        self.matingPool  =  []
+        f =  [i.fitness  for i in self.population]
+        maxFitness =  max(f)
+        fitness =  0
+        n =  0
+        for i in self.population:
+        fitness = self.scale_number(i.fitness,  0, maxFitness,  0,  1)
+        n = math.floor(fitness *  100)
+        for j in  range(n):
+        self.matingPool.append(i)
+
+
+### Generation - Evolution of the model ⌛
+In this process, we do the crossover and mutation process. The result of this is a new generation of (better) sentences.
+
+   
+
+     def  generate(self):
+        nexpop =  []
+        for i in range(len(self.population)):
+            p1 = self.matingPool[randint(0, len(self.matingPool)-1)]
+            p2 = self.matingPool[randint(0, len(self.matingPool)-1)]
+            c = p1.crossover(p2)
+            c.mutate(self.mutationRate,  self.target)
+            nexpop.append(c) # append child to temp pop
+        self.generations  = self.generations  +  1 # increment generations
+        self.population  = nexpop # set the next pop to current pop
+
+
+### Evaluation Process 📈
+This part is to check how well the sentences are evolving and if we have reached the target sentence. 
+
+    def  evaluate(self):
+       f =  [i.fitness  for i in self.population] #i is a DNA object
+        wr =  max(f)
+        obj =  max(self.population,  key=attrgetter('fitness'))
+        self.bphrase  = obj.phrase
+        if wr ==  1:
+            self.finished  =  True
+
+#### And we are done!!!! (a little cosmetics left)  🎉
+The code looks like:
+
+![enter image description here](https://i.imgur.com/oertNN4.png)
+
+[Code here - Population.py](https://gist.github.com/yajatvishwak/4e5c20cf962ad8bc64baf83d39ac01a2)
+
+
+### Step 3. Bring it to life
+
+ Create a file called main.py and write these lines of codes to run the algorithm.
+
+    from Population import Population
+    target =  "all that gliters is not gold"
+    popmax =  10000
+    mutationRate =  2
+    p =  Population(popmax, target, mutationRate)
+    while  not(p.isFinished()): # infinte loop till the model has converged
+        p.naturalSelection() # perform natural selection
+        p.generate() # make a new generation
+        p.evaluate() # evaluate generation
+        print(p.getBest()) # prints the best sentence of the generation
+    print("Generation: "  +  str(p.getGen()))
+    print("Evolved Phrase: "  +  str(p.getBest()))
+    print("Model Converged -- Evolved successfully")
+
+
+**Output**
+![enter image description here](https://i.imgur.com/Uxqr7LK.png)
+
+
+We see that it has successfully evolved itself to the target sentence in about a few seconds, successfully solving the problem we faced in Blog 2. :)
+
+
+This is about it for my post! 
+Thank you for reading! 
+(ignore my typos xP)
+Until next time! 
+Oh, wait...
+[Link to my GitHub Repo](https://github.com/yajatvishwak/shakespearean-monkey)
+
+>  A Huge shoutout to Daniel Shiffman's Nature of code, the inspiration of this blog post and my fuel for getting into exploring Artificial Intelligence the right way
